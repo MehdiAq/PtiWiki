@@ -43,6 +43,11 @@ else{
 }
 switch ($op) {
     case 'create':
+        if (!isset($_SESSION['username'])) {
+            echo "<script>alert(\"Vous devez vous connecter pour pouvoir créer une nouvelle page\");</script>";
+            echo "<br><a href=\"PtiWiki.php?op=read&file=PageAccueil\">Accueil</a>";
+            break;
+        }
         $page->create($conn);
         echo mainTPL(
             $title,
@@ -90,10 +95,6 @@ switch ($op) {
         );
         break;
     case 'save':
-        // truc adapté de http://www.tizag.com/phpT/php-magic-quotes.php
-        // if (get_magic_quotes_gpc())
-        //     $newText = stripslashes($_POST['data']);
-        // else
         $newText = $_POST['data'];
         $page->setText($newText)->save($conn);
         echo mainTPL(
